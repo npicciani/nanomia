@@ -1,0 +1,17 @@
+from snakemake.utils import min_version
+
+min_version("6.4.1")
+
+configfile: "config/config.yaml"
+ORTHODATE, = glob_wildcards("results/orthofinder/Results_{monthDay}/Gene_Trees")
+
+include: "rules/data.smk"
+include: "rules/orthologues.smk"
+
+rule all:
+    input:
+        expand("resources/sequences/{species}.pep.fasta", species=targets.index),
+        get_orthofinder_outdir(),
+        # expand("results/orthofinder/Results_{monthDay}/Gene_Trees",monthDay=ORTHODATE),
+        expand("results/emapper/{species}/{species}.pep.emapper.annotations", species=targets.index),
+        "results/annotations/gene_trees.master.annotated.txt"

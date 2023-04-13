@@ -1,12 +1,21 @@
 from datetime import date
+import os
+
 def get_orthofinder_outdir():
     """
     Generate path to orthofinder gene trees folder with current date as written by orthofinder
     """
-    today = date.today()
-    monthDay = today.strftime("%b%d")
-    outdir= f"results/orthofinder/Results_{monthDay}/Gene_Trees"
-    return outdir
+    ortho_dir='results/orthofinder'
+    if os.path.exists(ortho_dir):
+        for results_folder in os.listdir(ortho_dir):
+            results_path=f"results/orthofinder/{results_folder}/Gene_Trees"
+            return results_path
+    else:
+        today = date.today()
+        monthDay = today.strftime("%b%d")
+        outdir= f"results/orthofinder/Results_{monthDay}/Gene_Trees"
+        return outdir
+
 
 rule gunzip:
     """
@@ -21,7 +30,7 @@ rule gunzip:
     output:
         expand("resources/sequences/{species}.pep.fasta", species=targets.index)
     params:
-        nanomia_proteins="/home/nnp9/scratch60/nanomia/PO_YAL3284_Nanomia_bijuga.protein.fasta",
+        nanomia_proteins="/home/nnp9/scratch60/nanomia/PO2744_Nanomia_bijuga.protein.fasta",
         physalia_proteins="/home/nnp9/scratch60/nanomia/Physalia_physalis.proteins.fa",
         hormiphora_proteins="/home/nnp9/scratch60/nanomia/Hcv1av93_model_proteins.pep"
     shell:
@@ -53,10 +62,8 @@ rule emapper_annotate:
         "results/emapper/{species}/{species}.pep.emapper.annotations"
     params:
         outdir="results/emapper/{species}",
-        # script="workflow/scripts/annotate_emapper.py",
         emapper_path="$CONDA_PREFIX/bin/emapper.py",
         python_path="$CONDA_PREFIX/bin/python"
-    threads: 20
     conda:
         "../../workflow/envs/emapper.yaml" #eggnog-mapper=2.1.10, python=3.7.9
     shell:
@@ -74,7 +81,6 @@ rule orthofinder:
         expand("resources/sequences/{species}.pep.fasta", species=targets.index)
     output:
         directory(get_orthofinder_outdir())
-        # expand("results/orthofinder/Results_{monthDay}/Gene_Trees",monthDay=ORTHODATE)
     conda:
         "../../workflow/envs/orthofinder.yaml"
     threads: 20
@@ -90,7 +96,6 @@ rule append_annotations:
     """
     input:
         gene_trees_folder=get_orthofinder_outdir(),
-        # gene_trees_folder=expand("results/orthofinder/Results_{monthDay}/Gene_Trees",monthDay=ORTHODATE),
         annotations=expand("results/emapper/{species}/{species}.pep.emapper.annotations", species=targets.index)
     output:
         "results/annotations/gene_trees.master.annotated.txt"

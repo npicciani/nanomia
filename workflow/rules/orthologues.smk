@@ -30,9 +30,8 @@ rule gunzip:
     output:
         expand("resources/sequences/{species}.pep.fasta", species=targets.index)
     params:
-        nanomia_proteins="/home/nnp9/scratch60/nanomia/PO2744_Nanomia_bijuga.protein.fasta",
-        physalia_proteins="/home/nnp9/scratch60/nanomia/Physalia_physalis.proteins.fa",
-        hormiphora_proteins="/home/nnp9/scratch60/nanomia/Hcv1av93_model_proteins.pep"
+        nanomia_proteins="resources/local/PO2744_Nanomia_bijuga.protein.fasta",
+        hormiphora_proteins="resources/local/Hcv1av93_model_proteins.pep"
     shell:
         """
         dir="resources/sequences"
@@ -48,7 +47,6 @@ rule gunzip:
         rm -R $subdirs
 
         cp {params.nanomia_proteins} resources/sequences/Nanomia_bijuga.pep.fasta
-        cp {params.physalia_proteins} resources/sequences/Physalia_physalis.pep.fasta
         cp {params.hormiphora_proteins} resources/sequences/Hormiphora_californensis.pep.fasta
         """
 

@@ -49,26 +49,42 @@ rule gunzip:
         cp {params.nanomia_proteins} resources/sequences/Nanomia_bijuga.pep.fasta
         cp {params.hormiphora_proteins} resources/sequences/Hormiphora_californensis.pep.fasta
         """
-
+rule emapper_build_databases:
+    """
+    Build diamond database and others for Eggnog-mapper.
+    """
+    output:
+        dbs_stamp="results/emapper_dbs.stamp"
+    params:
+        data_folder="$CONDA_PREFIX/lib/python3.7/site-packages/data",
+        download_eggnog_databases="$CONDA_PREFIX/bin/download_eggnog_data.py"
+    conda:
+        "../../workflow/envs/emapper.yaml" #eggnog-mapper=2.1.10, python=3.7.9
+    shell:
+        """
+        mkdir {params.data_folder}
+        python {params.download_eggnog_databases} -y
+        touch {output.dbs_stamp}
+        """
 rule emapper_annotate:
     """
     Generate functional annotations using Eggnog-mapper 2.1.10.
     """
     input:
-        "resources/sequences/{species}.pep.fasta",
+        species_pep="resources/sequences/{species}.pep.fasta",
+        emapper_dbs="results/emapper_dbs.stamp"
     output:
         "results/emapper/{species}/{species}.pep.emapper.annotations"
     params:
         outdir="results/emapper/{species}",
-        emapper_path="$CONDA_PREFIX/bin/emapper.py",
-        python_path="$CONDA_PREFIX/bin/python"
+        emapper_path="$CONDA_PREFIX/bin/emapper.py"
     conda:
         "../../workflow/envs/emapper.yaml" #eggnog-mapper=2.1.10, python=3.7.9
     shell:
         """
-        filename={input}
+        filename={input.species_pep}
         basename=$(basename "$filename" .fasta)
-        python {params.emapper_path} -i {input} -m diamond -o $basename --cpu {threads} --output_dir {params.outdir} --dmnd_ignore_warnings
+        python {params.emapper_path} -i {input.species_pep} -m diamond -o $basename --cpu {threads} --output_dir {params.outdir} --dmnd_ignore_warnings
         """
 
 rule orthofinder:

@@ -1,6 +1,6 @@
 # Gene tree-based annotations
 
-This is a snakemake workflow to generate gene trees that is divided into a few main steps:
+This is a snakemake workflow to generate gene trees with functionally annotated sequences that is divided into a few main steps:
 
 1. Download of public data (proteins from target species) for building gene trees.
 2. Functionally annotate each protein set using eggNOG-mapper v.2.1.10.

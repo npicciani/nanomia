@@ -31,7 +31,6 @@ git clone https://github.com/npicciani/nanomia.git
 4. Run snakemake. I have set up a cluster profile snamed slurm so my command looks like:
 ```
 snakemake --profile slurm
+```
 
-
-
-
+## Output files

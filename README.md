@@ -25,6 +25,7 @@ conda env create -n snakemake --file snakemake_base.yml
 
 ```
 git clone https://github.com/npicciani/nanomia.git
+```
 
 3. In `config/download_targets.tsv`, include species name and sources for taxa you would like to include in your gene trees.
 4. Run snakemake. I have set up a cluster profile snamed slurm so my command looks like:

@@ -35,3 +35,5 @@ snakemake --profile slurm
 
 ## Output files
 The main output file is `results/annotations/gene_trees.master.annotated.txt`. In this file, each line corresponds to a gene tree in parenthetical notation and sequence headers with gene names.
+
+You can also check the master annotation file (`results/annotations/annotations.master.txt`), which concatenates eggnog annotations for all sequences from all species. It includes additional information for each sequence, such as KEGG pathways, Gene Ontology labels, EC numbers, BiGG reactions, CAZy terms, etc. - check out the eggnog publication [here](https://academic.oup.com/mbe/article/38/12/5825/6379734).

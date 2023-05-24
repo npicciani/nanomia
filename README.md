@@ -28,9 +28,10 @@ git clone https://github.com/npicciani/nanomia.git
 ```
 
 3. In `config/download_targets.tsv`, include species name and sources for taxa you would like to include in your gene trees.
-4. Run snakemake. I have set up a cluster profile snamed slurm so my command looks like:
+4. Run snakemake. I have set up a cluster profile named slurm so my command looks like:
 ```
 snakemake --profile slurm
 ```
 
 ## Output files
+The main output file is `results/annotations/gene_trees.master.annotated.txt`. In this file, each line corresponds to a gene tree in parenthetical notation and sequence headers with gene names.

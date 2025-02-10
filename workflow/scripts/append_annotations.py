@@ -8,7 +8,7 @@ import ahocorasick
 annotations_master = sys.argv[1]
 gene_trees_master = sys.argv[2]
 outdir = sys.argv[3]
-gene_trees_appended = f"{outdir}/gene_trees.master.annotated.txt"
+gene_trees_appended = f"{outdir}/resolved_gene_trees.master.annotated.txt"
 
 def make_GO_dictionary(emmaper_annotation_file):
     """Make dictionary with Protein IDS and corresponding GOs pulled

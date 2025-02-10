@@ -4,7 +4,7 @@ This is a snakemake workflow to generate gene trees with functionally annotated 
 
 1. Download of public data (proteins from target species) for building gene trees.
 2. Functionally annotate each protein set using eggNOG-mapper v.2.1.10.
-3. Generate gene trees using orthofinder v.2.5.4.
+3. Generate gene trees using orthofinder v.2.5.4. Notice that if Diamond makedb fails there are some workarounds (see the thread here: https://github.com/davidemms/OrthoFinder/issues/603, https://github.com/davidemms/OrthoFinder/issues/826). I added the flag "--ignore-warnings" to the command "diamond makedb --in INPUT -d OUTPUT" in the config.json file (OrthoFinder/scripts_of/config.json)
 4. Append gene names from functional annotations to sequence headers in gene trees.
 
 ## How to get started
